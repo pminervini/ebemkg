@@ -1,24 +1,29 @@
-# SME++
+# Energy-Based Embedding Models for Knowledge Graphs
 
 Prerequisites:
 
-    # apt-get install build-essential git python-dev python-setuptools libopenblas-dev libatlas-base-dev
+    # apt-get install build-essential git python-dev python-setuptools libopenblas-dev libatlas-base-dev parallel
+    # pip install --upgrade git+git://github.com/Theano/Theano.git
+    # pip install --upgrade numpy scipy  scikit-learn pymongo tsne  pandas statsmodels patsy seaborn termcolor
 
-    # pip install --upgrade numpy scipy git+git://github.com/Theano/Theano.git scikit-learn pymongo tsne  pandas statsmodels patsy seaborn termcolor
+The following commands use GNU Parallel for executing multiple experiments (default: 8) at the same time.
 
-    # update-alternatives --config libblas.so
-    There are 3 choices for the alternative libblas.so (providing /usr/lib/libblas.so).
+# Evaluating the Energy Functions:
 
-    Selection    Path                                   Priority   Status
-    ------------------------------------------------------------
-    * 0            /usr/lib/openblas-base/libopenblas.so   40        auto mode
-    1            /usr/lib/atlas-base/atlas/libblas.so    35        manual mode
-    2            /usr/lib/libblas/libblas.so             10        manual mode
-    3            /usr/lib/openblas-base/libopenblas.so   40        manual mode
+Freebase (FB15k):
 
-    Press enter to keep the current choice[*], or type selection number: 1
+    $ ./scripts/fb15k/fb15k.py | parallel -j 8
 
+WordNet:
 
-Sample usage on the FreeBase Knowledge Base:
+    $ ./scripts/wn/wn.py | parallel -j 8
 
-    $ ./learn_parameters.py --strategy=SGD --lr=0.001 --ndim=10 --name=fb --nbatches=1 --train=data/fb/FB-train.pkl --valid=data/fb/FB-valid.pkl --test=data/fb/FB-test.pkl --op=SME_bil
+# Comparing the Learning Algorithms:
+
+Freebase (FB15k):
+
+    $ ./scripts/fb15k_optimization/fb15k_optimal.py | parallel -j 8
+
+WordNet:
+
+    $ ./scripts/wn_optimization/wn_optimal.py | parallel -j 8
