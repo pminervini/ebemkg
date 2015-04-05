@@ -1,0 +1,103 @@
+INFO:root:Shape for training set: (16296, 483142)
+INFO:root:State: {'ndim': '50', 'test_all': 'None', 'test_path': 'None', 'nhid': '50', 'lremb': '10.0', 'seed': '4', 'simfn': 'L1', 'valid_path': 'None', 'nbatches': '10', 'lrparam': '10.0', 'decay': '0.9999', 'show_hinton_diagrams': 'False', 'no_rescaling': 'True', 'Nrel': '1345', 'ranking_score_right': 'False', 'Nent': '16296', 'Nsyn': '14951', 'method': 'MOMENTUM', 'loss_margin': '1.0', 'C': '1.0', 'epsilon': '1e-06', 'use_db': 'True', 'max_lr': 'None', 'l1_param_weight': 'None', 'filtered': 'False', 'name': 'fb15k_50/fb15k_MOMENTUM_354', 'totepochs': '50', 'l2_param_weight': 'None', 'train_path': 'data/fb15k/FB15k-train.pkl', 'op': 'TransE'}
+INFO:root:Starting the Experiment ..
+INFO:root:-- EPOCH 1 (7.443 seconds):
+INFO:root:COST >> 1.4903 +/- 0.7397, % updates: 47.847%
+INFO:root:-- EPOCH 2 (7.763 seconds):
+INFO:root:COST >> 0.7842 +/- 0.0074, % updates: 30.533%
+INFO:root:-- EPOCH 3 (7.436 seconds):
+INFO:root:COST >> 0.6797 +/- 0.0196, % updates: 28.125%
+INFO:root:-- EPOCH 4 (7.47 seconds):
+INFO:root:COST >> 0.6356 +/- 0.0209, % updates: 27.176%
+INFO:root:-- EPOCH 5 (7.244 seconds):
+INFO:root:COST >> 0.6055 +/- 0.0211, % updates: 26.552%
+INFO:root:-- EPOCH 6 (7.277 seconds):
+INFO:root:COST >> 0.5869 +/- 0.023, % updates: 26.252%
+INFO:root:-- EPOCH 7 (7.121 seconds):
+INFO:root:COST >> 0.5729 +/- 0.0167, % updates: 25.897%
+INFO:root:-- EPOCH 8 (7.32 seconds):
+INFO:root:COST >> 0.5603 +/- 0.0194, % updates: 25.626%
+INFO:root:-- EPOCH 9 (6.992 seconds):
+INFO:root:COST >> 0.5489 +/- 0.0195, % updates: 25.48%
+INFO:root:-- EPOCH 10 (6.507 seconds):
+INFO:root:COST >> 0.542 +/- 0.0152, % updates: 25.328%
+INFO:root:-- EPOCH 11 (7.744 seconds):
+INFO:root:COST >> 0.5374 +/- 0.0194, % updates: 25.262%
+INFO:root:-- EPOCH 12 (8.141 seconds):
+INFO:root:COST >> 0.5321 +/- 0.0188, % updates: 25.182%
+INFO:root:-- EPOCH 13 (8.221 seconds):
+INFO:root:COST >> 0.5272 +/- 0.0174, % updates: 25.106%
+INFO:root:-- EPOCH 14 (8.197 seconds):
+INFO:root:COST >> 0.5221 +/- 0.0162, % updates: 25.013%
+INFO:root:-- EPOCH 15 (8.139 seconds):
+INFO:root:COST >> 0.518 +/- 0.0178, % updates: 24.914%
+INFO:root:-- EPOCH 16 (8.387 seconds):
+INFO:root:COST >> 0.5153 +/- 0.0159, % updates: 24.892%
+INFO:root:-- EPOCH 17 (8.314 seconds):
+INFO:root:COST >> 0.5093 +/- 0.0148, % updates: 24.734%
+INFO:root:-- EPOCH 18 (8.207 seconds):
+INFO:root:COST >> 0.5091 +/- 0.0176, % updates: 24.782%
+INFO:root:-- EPOCH 19 (8.188 seconds):
+INFO:root:COST >> 0.506 +/- 0.0143, % updates: 24.764%
+INFO:root:-- EPOCH 20 (8.164 seconds):
+INFO:root:COST >> 0.5044 +/- 0.0169, % updates: 24.749%
+INFO:root:-- EPOCH 21 (8.256 seconds):
+INFO:root:COST >> 0.5017 +/- 0.0138, % updates: 24.682%
+INFO:root:-- EPOCH 22 (8.379 seconds):
+INFO:root:COST >> 0.5011 +/- 0.0119, % updates: 24.635%
+INFO:root:-- EPOCH 23 (8.663 seconds):
+INFO:root:COST >> 0.4955 +/- 0.0152, % updates: 24.601%
+INFO:root:-- EPOCH 24 (7.93 seconds):
+INFO:root:COST >> 0.495 +/- 0.0125, % updates: 24.588%
+INFO:root:-- EPOCH 25 (8.038 seconds):
+INFO:root:COST >> 0.4932 +/- 0.0149, % updates: 24.564%
+INFO:root:-- EPOCH 26 (8.305 seconds):
+INFO:root:COST >> 0.4923 +/- 0.0141, % updates: 24.579%
+INFO:root:-- EPOCH 27 (8.302 seconds):
+INFO:root:COST >> 0.4895 +/- 0.0142, % updates: 24.441%
+INFO:root:-- EPOCH 28 (8.246 seconds):
+INFO:root:COST >> 0.4884 +/- 0.0127, % updates: 24.427%
+INFO:root:-- EPOCH 29 (8.671 seconds):
+INFO:root:COST >> 0.4875 +/- 0.015, % updates: 24.492%
+INFO:root:-- EPOCH 30 (8.539 seconds):
+INFO:root:COST >> 0.4854 +/- 0.0146, % updates: 24.442%
+INFO:root:-- EPOCH 31 (8.526 seconds):
+INFO:root:COST >> 0.4862 +/- 0.0108, % updates: 24.441%
+INFO:root:-- EPOCH 32 (8.491 seconds):
+INFO:root:COST >> 0.4853 +/- 0.0126, % updates: 24.459%
+INFO:root:-- EPOCH 33 (8.466 seconds):
+INFO:root:COST >> 0.482 +/- 0.0127, % updates: 24.414%
+INFO:root:-- EPOCH 34 (8.445 seconds):
+INFO:root:COST >> 0.4818 +/- 0.0148, % updates: 24.358%
+INFO:root:-- EPOCH 35 (8.376 seconds):
+INFO:root:COST >> 0.4822 +/- 0.014, % updates: 24.391%
+INFO:root:-- EPOCH 36 (8.569 seconds):
+INFO:root:COST >> 0.481 +/- 0.0112, % updates: 24.386%
+INFO:root:-- EPOCH 37 (7.927 seconds):
+INFO:root:COST >> 0.4806 +/- 0.0113, % updates: 24.414%
+INFO:root:-- EPOCH 38 (8.197 seconds):
+INFO:root:COST >> 0.4781 +/- 0.0116, % updates: 24.35%
+INFO:root:-- EPOCH 39 (8.342 seconds):
+INFO:root:COST >> 0.4785 +/- 0.0129, % updates: 24.365%
+INFO:root:-- EPOCH 40 (8.053 seconds):
+INFO:root:COST >> 0.4772 +/- 0.0123, % updates: 24.38%
+INFO:root:-- EPOCH 41 (8.089 seconds):
+INFO:root:COST >> 0.4769 +/- 0.0127, % updates: 24.344%
+INFO:root:-- EPOCH 42 (8.337 seconds):
+INFO:root:COST >> 0.4769 +/- 0.0132, % updates: 24.375%
+INFO:root:-- EPOCH 43 (7.897 seconds):
+INFO:root:COST >> 0.4774 +/- 0.0105, % updates: 24.356%
+INFO:root:-- EPOCH 44 (8.267 seconds):
+INFO:root:COST >> 0.4768 +/- 0.0109, % updates: 24.347%
+INFO:root:-- EPOCH 45 (8.2 seconds):
+INFO:root:COST >> 0.4753 +/- 0.0104, % updates: 24.35%
+INFO:root:-- EPOCH 46 (7.545 seconds):
+INFO:root:COST >> 0.4731 +/- 0.0127, % updates: 24.294%
+INFO:root:-- EPOCH 47 (8.177 seconds):
+INFO:root:COST >> 0.4735 +/- 0.0101, % updates: 24.27%
+INFO:root:-- EPOCH 48 (8.147 seconds):
+INFO:root:COST >> 0.473 +/- 0.0117, % updates: 24.305%
+INFO:root:-- EPOCH 49 (8.023 seconds):
+INFO:root:COST >> 0.471 +/- 0.012, % updates: 24.262%
+INFO:root:-- EPOCH 50 (7.931 seconds):
+INFO:root:COST >> 0.4721 +/- 0.0099, % updates: 24.263%
