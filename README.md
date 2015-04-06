@@ -18,6 +18,8 @@ WordNet:
 
     $ ./scripts/wn/wn.py | parallel -j 8
 
+Validation and test results will be stored in directories logs/wn and logs/fb15k.
+
 # Comparing the Learning Algorithms:
 
 Freebase (FB15k):
