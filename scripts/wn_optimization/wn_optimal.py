@@ -74,7 +74,7 @@ for epochs in epochs_set:
                 for decay in decay_set:
                     for max_lr in max_lr_set:
                         for seed in seed_set:
-                            print(cmd_rmsprop % (seed, method, epochs, lr, decay, max_lr, ndim, method, c, path, nbatches, method, c))
+                            #print(cmd_rmsprop % (seed, method, epochs, lr, decay, max_lr, ndim, method, c, path, nbatches, method, c))
                             c += 1
 
 

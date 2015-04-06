@@ -88,7 +88,7 @@ def main(argv):
     if ('LOSS_THR' in os.environ.keys()):
         loss_threshold = float(os.environ['LOSS_THR'])
 
-    font_scale = None
+    font_scale = 1
     if ('FONT_SCALE' in os.environ.keys()):
         font_scale = float(os.environ['FONT_SCALE'])
 
