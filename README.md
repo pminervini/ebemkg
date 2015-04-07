@@ -2,9 +2,9 @@
 
 Prerequisites:
 
-    # apt-get install build-essential git python-dev python-setuptools libopenblas-dev libatlas-base-dev parallel
+    # apt-get install build-essential git gfortran python-dev python-setuptools python-pip python-numpy python-scipy cython libblas-dev libopenblas-dev libatlas-base-dev liblapack-dev parallel
     # pip install --upgrade git+git://github.com/Theano/Theano.git
-    # pip install --upgrade numpy scipy  scikit-learn pymongo tsne  pandas statsmodels patsy seaborn termcolor
+    # pip install --upgrade scikit-learn pymongo tsne  pandas statsmodels patsy seaborn termcolor
 
 The following commands use GNU Parallel for executing multiple experiments (default: 8) at the same time.
 
