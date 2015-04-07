@@ -19,16 +19,12 @@ import energy.evaluation as evaluation
 import energy.model as model
 
 import persistence.layer as persistence
-import visualization.console.hinton as hinton
 
 # Classes of methods
 base_vers = ['TransE', 'ScalE', 'NTransE', 'NScalE'] + ['BiTransE', 'BiScalE', 'BiNTransE', 'BiNScalE']
-
 xi_vers = ['XiTransE', 'XiScalE', 'XiNTransE', 'XiNScalE']
 xiscaltrans_vers = ['XiScalTransE', 'XiNScalTransE', 'XiTransScalE', 'XiNTransScalE']
-
 semixi_vers = ['XiScalTransSE', 'XiTransScalSE', 'XiN1ScalTransSE']
-
 lc_vers = ['CeTransE', 'CrTransE', 'CerTransE']
 scaltrans_vers = ['ScalTransE', 'NScalTransE', 'BiScalTransE', 'BiNScalTransE']
 aff_vers = ['AffinE', 'NAffinE', 'BiAffinE', 'BiNAffinE']
@@ -44,23 +40,16 @@ def learn(state):
 
     dataset = util.ExpDataSet(train_path=state.train_path, valid_path=state.valid_path, test_path=state.test_path)
 
-
     # Training set
     trainl, trainr, traino = dataset.train()
-    #_true_triples = [(l, o, r) for (l, o, r) in zip(trainl, traino, trainr)]
-
 
     # Validation set
     if dataset.has_valid is True:
         validl, validr, valido = dataset.valid()
-        #_true_triples += [(l, o, r) for (l, o, r) in zip(validl, valido, validr)]
-
 
     # Test set
     if dataset.has_test is True:
         testl, testr, testo = dataset.test()
-        #_true_triples += [(l, o, r) for (l, o, r) in zip(testl, testo, testr)]
-
 
     logging.info('Shape for training set: %s' % (str(trainl.shape)))
 
@@ -89,7 +78,7 @@ def learn(state):
     # Show experiment parameters
     logging.info('State: %s', exp['state'])
 
-    if state.op in ['SE', 'TransH'] + base_vers + semixi_vers + xi_vers + xiscaltrans_vers + lc_vers + scaltrans_vers + aff_vers + xiaff_vers:
+    if state.op in ['SE'] + base_vers + semixi_vers + xi_vers + xiscaltrans_vers + lc_vers + scaltrans_vers + aff_vers + xiaff_vers:
         traino = traino[-state.Nrel:, :] # last elements of traino
         if dataset.has_valid is True:
             valido = valido[-state.Nrel:, :]
@@ -133,11 +122,6 @@ def learn(state):
     elif (state.op in xi_vers) and type(embeddings) is not list:
         relationVec = learning.Embeddings(np.random, state.Nrel, state.ndim * 2, tag='relvec')
         embeddings = [embeddings, relationVec, relationVec]
-
-    elif (state.op in ['TransH']) and type(embeddings) is not list:
-        projectionVec = learning.Embeddings(np.random, state.Nrel, state.ndim, tag='projvec')
-        relationVec = learning.Embeddings(np.random, state.Nrel, state.ndim, tag='relvec')
-        embeddings = [embeddings, projectionVec, relationVec] # x, w, d
 
     elif (state.op in scaltrans_vers) and type(embeddings) is not list:
         scaleTranslateVec = learning.Embeddings(np.random, state.Nrel, state.ndim * 2, tag='scaleTranslateVec')
@@ -256,10 +240,7 @@ def learn(state):
 
             # embeddings normalization
             if type(embeddings) is list:
-                if state.op == 'TransH':
-                    embeddings[1].normalize() # normalize w
-                else:
-                    embeddings[0].normalize() # normalize e
+                embeddings[0].normalize() # normalize e
             else:
                 embeddings.normalize()
 
@@ -282,39 +263,6 @@ def learn(state):
             logging.error('NaN propagation detected!')
             return
 
-        # Show the Hinton diagrams of parameters
-        if state.show_hinton_diagrams:
-            # Only print the projection parameters
-            if relationVec is not None:
-                opt = np.get_printoptions()
-                np.set_printoptions(threshold='nan')
-
-                def summarize(M, name):
-                    print('%s matrix - Shape: %s, Min: %s, Max: %s, ||M||: %s' % (name, str(M.shape), M.min(), M.max(), np.linalg.norm(M.T)))
-
-                if 'embeddings_matrix' not in vars():
-                    embeddings_matrix = embeddings[0].E.get_value().T[-state.Nrel, :]
-                    #print(hinton.hinton_diagram(embeddings_matrix))
-                    summarize(embeddings_matrix, 'Embeddings')
-
-                    projections_matrix = relationVec.E.get_value().T
-                    print(hinton.hinton_diagram(projections_matrix))
-                    summarize(projections_matrix, 'Projections')
-                else:
-                    new_embeddings_matrix = embeddings[0].E.get_value().T[:-state.Nrel, :]
-                    embeddings_difference = embeddings_matrix - new_embeddings_matrix
-                    #print(hinton.hinton_diagram(embeddings_difference))
-                    summarize(embeddings_difference, 'Updates to Embeddings')
-                    embeddings_matrix = new_embeddings_matrix
-
-                    new_projections_matrix = relationVec.E.get_value().T
-                    projections_difference = projections_matrix - new_projections_matrix
-                    print(hinton.hinton_diagram(projections_difference))
-                    summarize(projections_difference, 'Updates to Projections')
-                    projections_matrix = new_projections_matrix
-                np.set_printoptions(**opt)
-
-
         out, outb = [], []
 
         # Evaluate the Ranking Score each test_all epochs
@@ -336,10 +284,8 @@ def learn(state):
                     state.valid = np.mean(resvalid[0] + resvalid[1])
 
                     if (state.filtered):
-                        #resvalid_filtered = evaluation.RankingScoreIdx_filtered(ranklfunc, rankrfunc, validlidx, validridx, validoidx, l_subtensorspec, r_subtensorspec, true_triples=_true_triples)
                         resvalid_filtered = evaluation.FilteredRankingScoreIdx(ranklfunc, rankrfunc, validlidx, validridx, validoidx, true_triples)
                         valid_summary_filtered = evaluation.ranking_summary(resvalid_filtered, idxo=validoidx, tag='filtered valid')
-
 
             test_summary = None
             state.test = None
@@ -357,10 +303,8 @@ def learn(state):
                     state.test = np.mean(restest[0] + restest[1])
 
                     if (state.filtered):
-                        #restest_filtered = evaluation.RankingScoreIdx_filtered(ranklfunc, rankrfunc, testlidx, testridx, testoidx, l_subtensorspec, r_subtensorspec, true_triples=_true_triples)
                         restest_filtered = evaluation.FilteredRankingScoreIdx(ranklfunc, rankrfunc, testlidx, testridx, testoidx, true_triples)
                         valid_summary_filtered = evaluation.ranking_summary(restest_filtered, idxo=testoidx, tag='filtered test')
-
 
             save_model = True
             if dataset.has_valid is True:
@@ -418,7 +362,7 @@ def learn(state):
 
 
 def launch(op='TransE', simfn=similarity.dot, ndim=20, nhid=20, Nsyn=None,
-        test_all=1, use_db=False, show_hinton_diagrams=False, seed=666,
+        test_all=1, use_db=False, seed=666,
         method='SGD', lremb=0.01, lrparam=0.1, no_rescaling=False, filtered=False,
         loss_margin=1.0, decay=0.999, epsilon=1e-6, max_lr=None, nbatches=100, totepochs=2000, C=1.0, name='tmp',
         l1_param_weight=None, l2_param_weight=None, ranking_score_right=False,
@@ -442,7 +386,6 @@ def launch(op='TransE', simfn=similarity.dot, ndim=20, nhid=20, Nsyn=None,
     state.loss_margin = loss_margin
     state.test_all = test_all
     state.use_db = use_db
-    state.show_hinton_diagrams = show_hinton_diagrams
 
     state.lremb = lremb
     state.lrparam = lrparam
@@ -469,7 +412,7 @@ def main(argv):
 
     name = 'eval'
 
-    train_path = './data/aifb/d2s/complete_noaff/aifb_complete_noaff.pkl'
+    train_path = 'data/fb15k/FB15k-train.pkl'
     valid_path = None
     test_path = None
 
@@ -487,17 +430,17 @@ def main(argv):
     op = 'TransE'
 
     ndim, nhid = 50, 50
-    nbatches = 100
-    totepochs = 500 #2000
+    nbatches = 10
+    totepochs = 1000
 
-    test_all, use_db, show_hinton_diagrams = None, False, False
-    seed = 666
+    test_all, use_db = None, False
+    seed = 123
 
     l1_param_weight, l2_param_weight = None, None
     ranking_score_right = False
 
     usage_str = ("""Usage: %s [-h]
-                    [--name=<name>] [--train=<path>] [--valid=<path>] [--test=<path>] [--use_db] [--hinton]
+                    [--name=<name>] [--train=<path>] [--valid=<path>] [--test=<path>] [--use_db]
                     [--sim=<sim>] [--op=<op>] [--strategy=<strategy>] [--ndim=<ndim>] [--nhid=<nhid>]
                     [--lr=<lr>] [--lremb=<lremb>] [--lrparam=<lrparam>] [--no_rescaling] [--filtered]
                     [--margin=<margin>] [--decay=<decay>] [--epsilon=<epsilon>] [--max_lr=<max_lr>] [--C=<C>]
@@ -507,7 +450,7 @@ def main(argv):
 
     # Parse arguments
     try:
-        opts, args = getopt.getopt(argv, 'h', [ 'name=', 'train=', 'valid=', 'test=', 'use_db', 'hinton',
+        opts, args = getopt.getopt(argv, 'h', [ 'name=', 'train=', 'valid=', 'test=', 'use_db',
                                                 'sim=', 'op=', 'strategy=', 'ndim=', 'nhid=',
                                                 'lr=', 'lremb=', 'lrparam=', 'no_rescaling', 'filtered',
                                                 'margin=', 'decay=', 'epsilon=', 'max_lr=', 'C=',
@@ -526,7 +469,6 @@ def main(argv):
             logging.info('\t--valid=<path> (default: %s)' % (valid_path))
             logging.info('\t--test=<path> (default: %s)' % (test_path))
             logging.info('\t--use_db (use a persistence layer -- default: %s)' % (use_db))
-            logging.info('\t--hinton (show hinton diagrams -- default: %s)' % (show_hinton_diagrams))
 
             logging.info('\t--sim=<sim> (default: %s)' % (sim_str))
             logging.info('\t--op=<op> (default: %s)' % (op))
@@ -566,8 +508,6 @@ def main(argv):
             test_path = arg
         elif opt == '--use_db':
             use_db = True
-        elif opt == '--hinton':
-            show_hinton_diagrams = True
 
         elif opt == '--sim':
             sim_str = arg
@@ -633,7 +573,7 @@ def main(argv):
 
     launch(op=op, simfn=simfn, method=method, seed=seed, totepochs=totepochs,
             name=name, train_path=train_path, valid_path=valid_path, test_path=test_path,
-            test_all=test_all, use_db=use_db, show_hinton_diagrams=show_hinton_diagrams,
+            test_all=test_all, use_db=use_db,
             ndim=ndim, nhid=nhid, nbatches=nbatches, Nsyn=None,
             lremb=lremb, lrparam=lrparam, no_rescaling=no_rescaling, filtered=filtered,
             loss_margin=margin, epsilon=epsilon, decay=decay, max_lr=max_lr, C=C,

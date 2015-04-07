@@ -27,15 +27,6 @@ def momentum(param, rate, decay, gradient, updates, param_previous_update):
 
     updates[param] = param + delta_x_t
 
-def nag(param, rate, decay, gradient, updates, param_previous_update): # [INCOMPLETE]
-    # decay represents the momentum
-    delta_x_t = (decay * param_previous_update) - (rate * gradient)
-
-    param_previous_update_updated = delta_x_t
-    updates[param_previous_update] = param_previous_update_updated
-
-    updates[param] = param + delta_x_t
-
 def adagrad(param, rate, epsilon, gradient, updates, param_squared_gradients):
     # ssg = \sum_t=1^T  [grad_t]^2
     param_squared_gradients_updated = param_squared_gradients + (gradient ** 2)

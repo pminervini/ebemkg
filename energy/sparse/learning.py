@@ -102,14 +102,9 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
     relln = S.dot(relationl.E, inpon).T
     relrn = S.dot(relationr.E, inpon).T
 
-
-    if op in ['TransH']:
-        lop, rop = leftop(lhs, rell, relr), rightop(rhs, rell)
-        lopn, ropn = leftop(lhsn, relln, relrn), rightop(rhsn, relln)
-    else:
-        # Similarity Function, applied to g_lhs and g_rhs
-        lop, rop = leftop(lhs, rell), rightop(rhs, relr)
-        lopn, ropn = leftop(lhsn, relln), rightop(rhsn, relrn)
+    # Similarity Function, applied to g_lhs and g_rhs
+    lop, rop = leftop(lhs, rell), rightop(rhs, relr)
+    lopn, ropn = leftop(lhsn, relln), rightop(rhsn, relrn)
 
     simi = fnsim(lop, rop)
     simin = fnsim(lopn, ropn)
@@ -132,7 +127,6 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
     if weight_contractive_regularizer_right is not None:
         cost = cost + (weight_contractive_regularizer_right * R.contractive_regularizer(rop, rhs))
 
-    # The ICLR 2015 paper defines a L2 regularizer on the parameters
     for rel_param in set([relationl.E, relationr.E]):
         if weight_L1_param_regularizer is not None:
             cost = cost + (weight_L1_param_regularizer * R.L1_regularizer(rel_param))
@@ -154,16 +148,6 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
         pass # do nothing
 
     elif (method == 'MOMENTUM'):
-        param_previous_update_map = collections.OrderedDict()
-
-        for param in params + embeds:
-            # Allocate the previous updates
-            previous_update_value = numpy.zeros(param.get_value().shape, dtype=theano.config.floatX)
-            param_previous_update = theano.shared(value=previous_update_value, name='su_' + param.name)
-
-            param_previous_update_map[param] = param_previous_update
-
-    elif (method == 'NAG'): # Nesterov's Accelerated Gradient [INCOMPLETE]
         param_previous_update_map = collections.OrderedDict()
 
         for param in params + embeds:
@@ -235,10 +219,6 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
         elif (method == 'MOMENTUM'): # SGD+MOMENTUM
             param_previous_update = param_previous_update_map[param]
             U.momentum(param, rate, decay, gradient, updates, param_previous_update)
-
-        elif (method == 'NAG'): # Nesterov's Accelerated Gradient [INCOMPLETE]
-            param_previous_update = param_previous_update_map[param]
-            U.nag(param, rate, decay, gradient, updates, param_previous_update)
 
         elif (method == 'ADAGRAD'): # ADAGRAD
             param_squared_gradients = param_squared_gradients_map[param]
@@ -304,18 +284,11 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
     lhsn = S.dot(embedding.E, inpln).T
     rhsn = S.dot(embedding.E, inprn).T
 
-    if op in ['TransH']:
-        simi = fnsim(leftop(lhs, rell, relr), rightop(rhs, relr))
-        # Negative 'left' member
-        similn = fnsim(leftop(lhsn, rell, relr), rightop(rhs, relr))
-        # Negative 'right' member
-        simirn = fnsim(leftop(lhs, rell, relr), rightop(rhsn, relr))
-    else:
-        simi = fnsim(leftop(lhs, rell), rightop(rhs, relr))
-        # Negative 'left' member
-        similn = fnsim(leftop(lhsn, rell), rightop(rhs, relr))
-        # Negative 'right' member
-        simirn = fnsim(leftop(lhs, rell), rightop(rhsn, relr))
+    simi = fnsim(leftop(lhs, rell), rightop(rhs, relr))
+    # Negative 'left' member
+    similn = fnsim(leftop(lhsn, rell), rightop(rhs, relr))
+    # Negative 'right' member
+    simirn = fnsim(leftop(lhs, rell), rightop(rhsn, relr))
 
     costl, outl = loss(simi, similn, margin=loss_margin)
     costr, outr = loss(simi, simirn, margin=loss_margin)
@@ -331,10 +304,8 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
 
         relln = S.dot(relationl.E, inpon).T
         relrn = S.dot(relationr.E, inpon).T
-        if op in ['TransH']:
-            simion = fnsim(leftop(lhs, relln, relrn), rightop(rhs, relrn))
-        else:
-            simion = fnsim(leftop(lhs, relln), rightop(rhs, relrn))
+
+        simion = fnsim(leftop(lhs, relln), rightop(rhs, relrn))
 
         costo, outo = loss(simi, simion, margin=loss_margin)
         cost += costo
@@ -353,7 +324,6 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
     if weight_contractive_regularizer_right is not None:
         cost = cost + (weight_contractive_regularizer_right * R.contractive_regularizer(rop, rhs))
 
-    # The ICLR 2015 paper defines a L2 regularizer on the parameters
     for rel_param in set([relationl.E, relationr.E]):
         if weight_L1_param_regularizer is not None:
             cost = cost + (weight_L1_param_regularizer * R.L1_regularizer(rel_param))
@@ -372,16 +342,6 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
         pass # do nothing
 
     elif (method == 'MOMENTUM'):
-        param_previous_update_map = collections.OrderedDict()
-
-        for param in params + embeds:
-            # Allocate the previous updates
-            previous_update_value = numpy.zeros(param.get_value().shape, dtype=theano.config.floatX)
-            param_previous_update = theano.shared(value=previous_update_value, name='su_' + param.name)
-
-            param_previous_update_map[param] = param_previous_update
-
-    elif (method == 'NAG'): # Nesterov's Accelerated Gradient [INCOMPLETE]
         param_previous_update_map = collections.OrderedDict()
 
         for param in params + embeds:
@@ -452,10 +412,6 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
             param_previous_update = param_previous_update_map[param]
             U.momentum(param, rate, decay, gradient, updates, param_previous_update)
 
-        elif (method == 'NAG'): # Nesterov's Accelerated Gradient [INCOMPLETE]
-            param_previous_update = param_previous_update_map[param]
-            U.nag(param, rate, decay, gradient, updates, param_previous_update)
-
         elif (method == 'ADAGRAD'): # ADAGRAD
             param_squared_gradients = param_squared_gradients_map[param]
             U.adagrad(param, rate, epsilon, gradient, updates, param_squared_gradients)
@@ -498,10 +454,7 @@ def SimFn(fnsim, embeddings, leftop, rightop, op=''):
     rell = S.dot(relationl.E, inpo).T
     relr = S.dot(relationr.E, inpo).T
 
-    if op in ['TransH']:
-        lop, rop = leftop(lhs, rell, relr), rightop(rhs, rell)
-    else:
-        lop, rop = leftop(lhs, rell), rightop(rhs, relr)
+    lop, rop = leftop(lhs, rell), rightop(rhs, relr)
 
     simi = fnsim(lop, rop)
 
