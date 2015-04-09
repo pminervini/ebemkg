@@ -62,7 +62,6 @@ def parse_embeddings(embeddings):
 def TrainFn(fnsim, embeddings, leftop, rightop,
                 loss=loss.hinge, loss_margin=1.0, op='', method='SGD',
                 decay=0.999, epsilon=1e-6, max_learning_rate=None,
-                transh_c=1.0, transh_epsilon=1e-6,
 
                 weight_L1_param_regularizer=None, weight_L2_param_regularizer=None,
                 weight_contractive_regularizer_left=None, weight_contractive_regularizer_right=None):
@@ -113,11 +112,6 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
     loss_args = {} if 'margin' not in supported_loss_args else { 'margin':loss_margin }
 
     cost, out = loss(simi, simin, **loss_args)
-
-    if op == 'TransH' and transh_c is not None:
-        penalty = R.unitary_norm2_penalty(embedding.E) + R.orthogonal_penalty(relationl.E, relationr.E, epsilon=transh_epsilon)
-        transh_cost = cost + (transh_c * penalty)
-        cost = transh_cost
 
     # <EXPERIMENTAL_CODE>
     # Should I also plug examples from corrupted triples ?
@@ -260,7 +254,7 @@ def TrainFn(fnsim, embeddings, leftop, rightop,
 def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
                     loss=loss.hinge, loss_margin=1.0, op=None, method='SGD',
                     decay=0.999, epsilon=1e-6, max_learning_rate=None,
-                    transh_c=1.0, transh_epsilon=1e-6,
+
                     weight_L1_param_regularizer=None, weight_L2_param_regularizer=None,
                     weight_contractive_regularizer_left=None, weight_contractive_regularizer_right=None):
 
@@ -311,10 +305,6 @@ def TrainFn1Member(fnsim, embeddings, leftop, rightop, rel=True,
         cost += costo
         out = T.concatenate([out, outo])
         list_in += [inpon]
-
-    if op == 'TransH' and transh_c is not None:
-        penalty = R.unitary_norm2_penalty(embedding.E) + R.orthogonal_penalty(relationl.E, relationr.E, epsilon=transh_epsilon)
-        cost = cost + (transh_c * penalty)
 
     # <EXPERIMENTAL_CODE>
     # Should I also plug examples from corrupted triples ?

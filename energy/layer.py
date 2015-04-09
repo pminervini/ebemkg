@@ -325,20 +325,6 @@ class LayerCombination(object):
         c = T.tensordot(x.T, self.W, axes=[0, 1])
         return self.act(c)
 
-class LayerTransH(object):
-    """
-    Class for a layer with two input vectors that performs the sum of
-    the projection of the 'left member' and of the 'right member'.
-    """
-    def __init__(self):
-        """Constructor."""
-        self.projection = LayerProjection()
-        self.params = self.projection.params + []
-
-    def __call__(self, x, w, d):
-        """Forward function."""
-        return self.projection(x, w) + d
-
 class LayerScalTrans(object):
     def __init__(self, ndim):
         """Constructor."""

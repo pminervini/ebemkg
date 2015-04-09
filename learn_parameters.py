@@ -150,7 +150,7 @@ def learn(state):
     # Functions compilation
     trainfunc = learning.TrainFn1Member(simfn, embeddings, leftop, rightop, rel=False,
                                         method=state.method, op=state.op, loss=loss.hinge, loss_margin=state.loss_margin,
-                                        decay=state.decay, epsilon=state.epsilon, max_learning_rate=state.max_lr, transh_c=state.C,
+                                        decay=state.decay, epsilon=state.epsilon, max_learning_rate=state.max_lr,
                                         weight_L1_param_regularizer=state.l1_param_weight, weight_L2_param_regularizer=state.l2_param_weight)
 
     # FB has some specific parameters for RankRightFnIdx:

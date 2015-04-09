@@ -38,9 +38,6 @@ def op(op, ndim, nhid):
     elif op == 'BiNTransE':
         leftop = layer.LayerNTrans()
         rightop = layer.LayerNTrans()
-    elif op == 'TransH':
-        leftop = layer.LayerTransH()
-        rightop = layer.LayerProjection()
     elif op == 'ScalE':
         leftop = layer.LayerScal()
         rightop = layer.Unstructured()
